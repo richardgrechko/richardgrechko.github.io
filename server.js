@@ -196,7 +196,7 @@ class Vector {
     return Math.atan2(this.y, this.x);
   }
   isShorterThan(d) {
-    return this.x * this.x + this.y * this.y <= d * d;//another useful guy
+    return this.x * this.x + this.y * this.y <= d * d; //another useful guy
   }
 }
 function nullVector(z) {
@@ -269,7 +269,8 @@ class IO {
     };
   }
 }
-class io_doNothing extends IO {
+const ioTypes = {};
+ioTypes.doNothing = class extends IO {
   constructor(body) {
     super(body);
     this.acceptsFromTop = false;
@@ -286,8 +287,8 @@ class io_doNothing extends IO {
       fire: false,
     };
   }
-}
-class io_moveInCircles extends IO {
+};
+ioTypes.moveInCircles = class extends IO {
   constructor(body) {
     super(body);
     this.acceptsFromTop = false;
@@ -308,8 +309,8 @@ class io_moveInCircles extends IO {
     }
     return { goal: this.goal };
   }
-}
-class io_listenToPlayer extends IO {
+};
+ioTypes.listenToPlayer = class extends IO {
   constructor(b, p) {
     super(b);
     this.player = p;
@@ -365,8 +366,8 @@ class io_listenToPlayer extends IO {
       alt: this.player.command.rmb || this.player.command.autoalt,
     };
   }
-}
-class io_mapTargetToGoal extends IO {
+};
+ioTypes.mapTargetToGoal = class extends IO {
   constructor(b) {
     super(b);
   }
@@ -382,8 +383,8 @@ class io_mapTargetToGoal extends IO {
       };
     }
   }
-}
-class io_boomerang extends IO {
+};
+ioTypes.boomerang = class extends IO {
   constructor(b) {
     super(b);
     this.r = 0;
@@ -417,8 +418,8 @@ class io_boomerang extends IO {
       };
     }
   }
-}
-class io_goToMasterTarget extends IO {
+};
+ioTypes.goToMasterTarget = class extends IO {
   constructor(body) {
     super(body);
     this.myGoal = {
@@ -441,8 +442,8 @@ class io_goToMasterTarget extends IO {
       };
     }
   }
-}
-class io_goAwayFromMasterTarget extends IO {
+};
+ioTypes.goAwayFromMasterTarget = class extends IO {
   constructor(body) {
     super(body);
     this.myGoal = {
@@ -465,8 +466,8 @@ class io_goAwayFromMasterTarget extends IO {
       };
     }
   }
-}
-class io_block extends IO {
+};
+ioTypes.block = class extends IO {
   constructor(body) {
     super(body);
     this.blockAngle =
@@ -498,8 +499,8 @@ class io_block extends IO {
       };
     }
   }
-}
-class io_portal extends IO {
+};
+ioTypes.portal = class extends IO {
   constructor(body) {
     super(body);
     this.myGoal = {
@@ -522,27 +523,28 @@ class io_portal extends IO {
       main: true,
     };
   }
-}
-class io_sineA extends IO {
+};
+ioTypes.sineA = class extends IO {
   constructor(b) {
     super(b);
     this.phase = 1;
     this.wo = this.body.master.facing;
+    this.amplitude = 1
   }
   think(input) {
     this.phase += 0.25;
     this.body.x +=
-      this.phase * Math.cos(this.wo) -
-      10 * (Math.cos(this.phase) * Math.sin(this.wo) * 1.25);
+      (this.phase * Math.cos(this.wo) -
+      10 * (Math.cos(this.phase) * Math.sin(this.wo) * 1.25))*this.amplitude;
     this.body.y +=
-      this.phase * Math.sin(this.wo) +
-      10 * (Math.cos(this.phase) * Math.cos(this.wo) * 1.25);
+      (this.phase * Math.sin(this.wo) +
+      10 * (Math.cos(this.phase) * Math.cos(this.wo) * 1.25))*this.amplitude;
     return {
       power: 1,
     };
   }
-}
-class io_sidewind extends IO {
+};
+ioTypes.sidewind = class extends IO {
   constructor(b) {
     super(b);
     this.phase = 1;
@@ -562,59 +564,62 @@ class io_sidewind extends IO {
       };
     }
   }
-}
-class io_sineB extends IO {
+};
+ioTypes.sineB = class extends IO {
   constructor(b) {
     super(b);
     this.phase = 1;
     this.wo = this.body.master.facing;
+    this.amplitude = 1
   }
   think(input) {
     this.phase += 0.25;
     this.body.x +=
-      this.phase * Math.cos(this.wo) +
-      10 * (Math.cos(this.phase) * Math.sin(this.wo) * 1.25);
+      (this.phase * Math.cos(this.wo) +
+      10 * (Math.cos(this.phase) * Math.sin(this.wo) * 1.25))*this.amplitude;
     this.body.y +=
-      this.phase * Math.sin(this.wo) -
-      10 * (Math.cos(this.phase) * Math.cos(this.wo) * 1.25);
+      (this.phase * Math.sin(this.wo) -
+      10 * (Math.cos(this.phase) * Math.cos(this.wo) * 1.25))*this.amplitude;
   }
-}
-class io_sineC extends IO {
+};
+ioTypes.sineC = class extends IO {
   constructor(b) {
     super(b);
     this.phase = -1;
     this.wo = this.body.master.facing;
+    this.amplitude = 1
   }
   think(input) {
     this.phase -= 0.25;
     this.body.x +=
-      this.phase * Math.cos(this.wo) +
-      10 * (Math.cos(this.phase) * Math.sin(this.wo) * 1.25);
+      (this.phase * Math.cos(this.wo) +
+      10 * (Math.cos(this.phase) * Math.sin(this.wo) * 1.25))*this.amplitude;
     this.body.y +=
-      this.phase * Math.sin(this.wo) -
-      10 * (Math.cos(this.phase) * Math.cos(this.wo) * 1.25);
+      (this.phase * Math.sin(this.wo) -
+      10 * (Math.cos(this.phase) * Math.cos(this.wo) * 1.25))*this.amplitude;
     return {
       power: 1,
     };
   }
-}
-class io_sineD extends IO {
+};
+ioTypes.sineD = class extends IO {
   constructor(b) {
     super(b);
     this.phase = -1;
     this.wo = this.body.master.facing;
+    this.amplitude = 1
   }
   think(input) {
     this.phase -= 0.25;
     this.body.x +=
-      this.phase * Math.cos(this.wo) -
-      10 * (Math.cos(this.phase) * Math.sin(this.wo) * 1.25);
+      (this.phase * Math.cos(this.wo) -
+      10 * (Math.cos(this.phase) * Math.sin(this.wo) * 1.25))*this.amplitude;
     this.body.y +=
-      this.phase * Math.sin(this.wo) +
-      10 * (Math.cos(this.phase) * Math.cos(this.wo) * 1.25);
+      (this.phase * Math.sin(this.wo) +
+      10 * (Math.cos(this.phase) * Math.cos(this.wo) * 1.25))*this.amplitude;
   }
-}
-class io_canRepel extends IO {
+};
+ioTypes.canRepel = class extends IO {
   constructor(b) {
     super(b);
   }
@@ -630,8 +635,8 @@ class io_canRepel extends IO {
       };
     }
   }
-}
-class io_alwaysFire extends IO {
+};
+ioTypes.alwaysFire = class extends IO {
   constructor(body) {
     super(body);
   }
@@ -641,8 +646,8 @@ class io_alwaysFire extends IO {
       fire: true,
     };
   }
-}
-class io_altFire extends IO {
+};
+ioTypes.altFire = class extends IO {
   constructor(body) {
     super(body);
   }
@@ -652,8 +657,8 @@ class io_altFire extends IO {
       fire: input.alt ? true : false,
     };
   }
-}
-class io_targetSelf extends IO {
+};
+ioTypes.targetSelf = class extends IO {
   constructor(body) {
     super(body);
   }
@@ -664,8 +669,8 @@ class io_targetSelf extends IO {
       target: { x: 0, y: 0 },
     };
   }
-}
-class io_mapAltToFire extends IO {
+};
+ioTypes.mapAltToFire = class extends IO {
   constructor(body) {
     super(body);
   }
@@ -677,8 +682,8 @@ class io_mapAltToFire extends IO {
       };
     }
   }
-}
-class io_onlyAcceptInArc extends IO {
+};
+ioTypes.onlyAcceptInArc = class extends IO {
   constructor(body) {
     super(body);
   }
@@ -701,8 +706,8 @@ class io_onlyAcceptInArc extends IO {
       }
     }
   }
-}
-class io_nearestDifferentMaster extends IO {
+};
+ioTypes.nearestDifferentMaster = class extends IO {
   constructor(body) {
     super(body);
     this.targetLock = undefined;
@@ -877,8 +882,8 @@ class io_nearestDifferentMaster extends IO {
     }
     return {};
   }
-}
-class io_avoid extends IO {
+};
+ioTypes.avoid = class extends IO {
   constructor(body) {
     super(body);
   }
@@ -934,8 +939,8 @@ class io_avoid extends IO {
       }
     }
   }
-}
-class io_minion extends IO {
+};
+ioTypes.minion = class extends IO {
   constructor(body) {
     super(body);
     this.turnwise = 1;
@@ -991,8 +996,8 @@ class io_minion extends IO {
       };
     }
   }
-}
-class io_hangOutNearMaster extends IO {
+};
+ioTypes.hangOutNearMaster = class extends IO {
   constructor(body) {
     super(body);
     this.acceptsFromTop = false;
@@ -1037,8 +1042,36 @@ class io_hangOutNearMaster extends IO {
       return output;
     }
   }
-}
-class io_obeysMouseRot extends IO {
+};
+    ioTypes.circleTarget = class extends IO {
+        constructor(body) {
+            super(body);
+        }
+
+        think(input) {
+            if (input.target != null && (input.alt || input.main)) {
+                let orbit = 280;
+                let goal;
+                let power = 5;
+                let target = new Vector(input.target.x, input.target.y);
+                let dir = target.direction + power;
+                if (input.alt) {
+                    orbit /= 2
+                    this.body.range -= 0.5
+                }
+                // Orbit point
+                goal = {
+                    x: this.body.x + target.x - orbit * Math.cos(dir),
+                    y: this.body.y + target.y - orbit * Math.sin(dir),
+                };
+                return {
+                    goal: goal,
+                    power: power,
+                };
+            }
+        }
+    }
+ioTypes.obeysMouseRot = class extends IO {
   constructor(b) {
     super(b);
   }
@@ -1051,8 +1084,8 @@ class io_obeysMouseRot extends IO {
       main: true,
     };
   }
-}
-class io_slowspin extends IO {
+};
+ioTypes.slowspin = class extends IO {
   constructor(b) {
     super(b);
     this.a = 0;
@@ -1072,8 +1105,8 @@ class io_slowspin extends IO {
       main: true,
     };
   }
-}
-class io_slowspineee extends IO {
+};
+ioTypes.slowspineee = class extends IO {
   constructor(b) {
     super(b);
     this.a = 0;
@@ -1093,8 +1126,8 @@ class io_slowspineee extends IO {
       main: true,
     };
   }
-}
-class io_spin extends IO {
+};
+ioTypes.spin = class extends IO {
   constructor(b) {
     super(b);
     this.a = 0;
@@ -1114,10 +1147,9 @@ class io_spin extends IO {
       main: true,
     };
   }
-}
+};
 
-
-class io_whirlwind extends IO {
+ioTypes.whirlwind = class extends IO {
   constructor(body, opts = {}) {
     super(body);
     this.body.angle = 0;
@@ -1156,8 +1188,8 @@ class io_whirlwind extends IO {
       Math.max(trueMinDistance, this.body.inverseDist)
     );
   }
-}
-class io_orbit extends IO {
+};
+ioTypes.orbit = class extends IO {
   constructor(body, opts = {}) {
     super(body);
     this.realDist = 0;
@@ -1180,8 +1212,8 @@ class io_orbit extends IO {
 
     this.body.facing = angle;
   }
-}
-class io_fastspin extends IO {
+};
+ioTypes.fastspin = class extends IO {
   constructor(b) {
     super(b);
     this.a = 0;
@@ -1201,8 +1233,8 @@ class io_fastspin extends IO {
       main: true,
     };
   }
-}
-class io_reversespin extends IO {
+};
+ioTypes.reversespin = class extends IO {
   constructor(b) {
     super(b);
     this.a = 0;
@@ -1222,8 +1254,8 @@ class io_reversespin extends IO {
       main: true,
     };
   }
-}
-class io_barspin extends IO {
+};
+ioTypes.barspin = class extends IO {
   constructor(b) {
     super(b);
     this.a = 0;
@@ -1243,8 +1275,8 @@ class io_barspin extends IO {
       main: true,
     };
   }
-}
-class io_dontTurn extends IO {
+};
+ioTypes.dontTurn = class extends IO {
   constructor(b) {
     super(b);
   }
@@ -1258,8 +1290,8 @@ class io_dontTurn extends IO {
       main: true,
     };
   }
-}
-class io_fleeAtLowHealth extends IO {
+};
+ioTypes.fleeAtLowHealth = class extends IO {
   constructor(b) {
     super(b);
     this.fear = util.clamp(ran.gauss(0.7, 0.15), 0.1, 0.9);
@@ -1279,39 +1311,15 @@ class io_fleeAtLowHealth extends IO {
       };
     }
   }
-}
-class io_selfDestructWhenAlt extends IO {
+};
+ioTypes.selfDestructWhenAlt = class extends IO {
   constructor(body) {
     super(body);
   }
   think(input) {
     if (input.alt) input.kill();
   }
-}
-//zoomies
-class io_zoom extends IO {
-  constructor(body, opts = {}) {
-    super(body);
-    this.distance = 225;
-    this.dynamic = null;
-    this.permanent = false;
-  }
-
-  think(input) {
-    if (this.permanent || (input.alt && input.target)) {
-      if (this.dynamic || this.body.cameraOverrideX === null) {
-        let direction = Math.atan2(input.target.y, input.target.x);
-        this.body.cameraOverrideX =
-          this.body.x + this.distance * Math.cos(direction);
-        this.body.cameraOverrideY =
-          this.body.y + this.distance * Math.sin(direction);
-      }
-    } else {
-      this.body.cameraOverrideX = null;
-      this.body.cameraOverrideY = null;
-    }
-  }
-}
+};
 
 /***** ENTITIES *****/
 // Define skills
@@ -1664,6 +1672,7 @@ class Gun {
     };
     this.canShoot = false;
     this.color = 16;
+    this.colorOverride = null;
     if (info.PROPERTIES != null && info.PROPERTIES.TYPE != null) {
       this.canShoot = true;
       this.label = info.PROPERTIES.LABEL == null ? "" : info.PROPERTIES.LABEL;
@@ -1695,7 +1704,11 @@ class Gun {
         let toAdd = [];
         let self = this;
         info.PROPERTIES.GUN_CONTROLLERS.forEach(function (ioName) {
-          toAdd.push(eval("new " + ioName + "(self)"));
+          for (let i = 0; i < info.PROPERTIES.GUN_CONTROLLERS.length; i++) {
+            let io = info.PROPERTIES.GUN_CONTROLLERS[i];
+            if ("string" == typeof io) io = [io];
+            toAdd.push(new ioTypes[io[0]](this, io[1]));
+          }
         });
         this.controllers = toAdd.concat(this.controllers);
       }
@@ -1729,8 +1742,11 @@ class Gun {
         info.PROPERTIES.MAX_CHILDREN == null
           ? false
           : info.PROPERTIES.MAX_CHILDREN;
-            this.destroyOldestChild = info.PROPERTIES.DESTROY_OLDEST_CHILD == null ? false : info.PROPERTIES.DESTROY_OLDEST_CHILD;
-            if (this.destroyOldestChild) this.countsOwnKids++;
+      this.destroyOldestChild =
+        info.PROPERTIES.DESTROY_OLDEST_CHILD == null
+          ? false
+          : info.PROPERTIES.DESTROY_OLDEST_CHILD;
+      if (this.destroyOldestChild) this.countsOwnKids++;
       this.syncsSkills =
         info.PROPERTIES.SYNCS_SKILLS == null
           ? false
@@ -1741,9 +1757,10 @@ class Gun {
           : info.PROPERTIES.NEGATIVE_RECOIL;
       this.shootOnDeath =
         info.PROPERTIES.SHOOT_ON_DEATH == null
-          ? true
+          ? false
           : info.PROPERTIES.SHOOT_ON_DEATH;
-                if (info.PROPERTIES.COLOR_OVERRIDE != null) this.colorOverride = info.PROPERTIES.COLOR_OVERRIDE;
+      if (info.PROPERTIES.COLOR_OVERRIDE != null)
+        this.colorOverride = info.PROPERTIES.COLOR_OVERRIDE;
       this.canShoot =
         info.PROPERTIES.CAN_SHOOT == null ? true : info.PROPERTIES.CAN_SHOOT;
       this.timesToFire = info.PROPERTIES.TIMES_TO_FIRE || 1;
@@ -1833,12 +1850,12 @@ class Gun {
           this.body.children.length * (this.calculator === "necro" ? sk.rld : 1)
         : true;
       // Destroy oldest child
-        if (this.destroyOldestChild) {
-            if (!shootPermission) {
-                shootPermission = true;
-                this.destroyOldest();
-            }
+      if (this.destroyOldestChild) {
+        if (!shootPermission) {
+          shootPermission = true;
+          this.destroyOldest();
         }
+      }
       // invulnerable?
       if (this.body.master.invuln) {
         shootPermission = false;
@@ -1852,11 +1869,11 @@ class Gun {
         if (this.cycle < 1) {
           this.cycle +=
             1 /
-            this.settings.reload /
-            roomSpeed /
-            (this.calculator == "necro" || this.calculator == "fixed reload"
-              ? sk.rld / 2
-              : sk.rld);
+            (this.settings.reload /
+              c.runSpeed *
+              (this.calculator == "necro" || this.calculator == "fixed reload"
+                ? 1
+                : sk.rld));
         }
       }
       // Firing routines
@@ -1897,18 +1914,18 @@ class Gun {
       }
     }
   }
-    destroyOldest() {
-        let oldestChild,
-            oldestTime = Infinity;
-        for (let i = 0; i < this.children.length; i++) {
-            let child = this.children[i];
-            if (child && child.creationTime < oldestTime) {
-                oldestTime = child.creationTime;
-                oldestChild = child;
-            }
-        }
-        if (oldestChild) oldestChild.kill();
+  destroyOldest() {
+    let oldestChild,
+      oldestTime = Infinity;
+    for (let i = 0; i < this.children.length; i++) {
+      let child = this.children[i];
+      if (child && child.creationTime < oldestTime) {
+        oldestTime = child.creationTime;
+        oldestChild = child;
+      }
     }
+    if (oldestChild) oldestChild.kill();
+  }
 
   syncChildren() {
     if (this.syncsSkills) {
@@ -1996,6 +2013,7 @@ class Gun {
         (this.label ? " " + this.label : "") +
         " " +
         o.label,
+      ON_DEALT_DAMAGE: o.onDealtDamage,
     });
     o.color = this.body.color;
     // Keep track of it and give it the function it needs to deutil.log itself upon death
@@ -2009,13 +2027,14 @@ class Gun {
     }
     o.source = this.body;
     o.facing = o.velocity.direction;
+    // On dealt damage
+    if (this.onDealtDamage != null) o.onDealtDamage = this.onDealtDamage;
     // Color it
-    if (this.colorOverride != null) o.color = this.colorOverride;
-            if (this.colorOverride === "fire") {
-            o.color = 100
-            for (let i = 0; i < 15; i++) setTimeout(()=>{
-              o.color++
-            }, 100 * i)
+    if (this.colorOverride != null) {
+      this.teamColor = this.colorOverride;
+    }
+    if (o.teamColor) {
+      o.teamColor = o.color;
     }
     // Necromancers.
     let oo = o;
@@ -2310,7 +2329,13 @@ class HealthType {
 class Entity {
   constructor(position, master = this) {
     this.isGhost = false;
-    this.killCount = { solo: 0, assists: 0, bosses: 0, killstreak: 0, killers: [] };
+    this.killCount = {
+      solo: 0,
+      assists: 0,
+      bosses: 0,
+      killstreak: 0,
+      killers: [],
+    };
     this.creationTime = new Date().getTime();
     // Inheritance
     this.master = master;
@@ -2513,9 +2538,9 @@ class Entity {
     if (set.CONTROLLERS != null) {
       let toAdd = [];
       for (let i = 0; i < set.CONTROLLERS.length; i++) {
-        set.CONTROLLERS.forEach((ioName) => {
-          toAdd.push(eval("new io_" + ioName + "(this)"));
-        });
+        let io = set.CONTROLLERS[i];
+        if ("string" == typeof io) io = [io];
+        toAdd.push(new ioTypes[io[0]](this, io[1]));
       }
       this.addController(toAdd);
     }
@@ -2696,6 +2721,16 @@ class Entity {
           class: e,
           tier: 4,
           level: c.TIER_4,
+          index: e.index,
+        });
+      });
+    }
+    if (set.UPGRADES_TIER_5 != null) {
+      set.UPGRADES_TIER_5.forEach((e) => {
+        this.upgrades.push({
+          class: e,
+          tier: 5,
+          level: c.TIER_5,
           index: e.index,
         });
       });
@@ -2897,14 +2932,14 @@ class Entity {
           break;
       }
     if (set.BURN != null) {
-          this.burn = set.BURN
-        }
-        if (set.BURNT != null) {
-          this.burnt = set.BURNT
-        }
-        if (set.BURN_TO_APPLY != null) {
-          this.burnToApply = set.BURN_TO_APPLY
-        }
+      this.burn = set.BURN;
+    }
+    if (set.BURNT != null) {
+      this.burnt = set.BURNT;
+    }
+    if (set.BURN_TO_APPLY != null) {
+      this.burnToApply = set.BURN_TO_APPLY;
+    }
     if (set.mockup != null) {
       this.mockup = set.mockup;
     }
@@ -2983,8 +3018,10 @@ class Entity {
     // Figure out how we'll be drawn.
     this.bound.layer = position[5];
     // Initalize.
-    this.facing = this.bond.facing + this.bound.angle;
-    this.facingType = "bound";
+    if (this.facingType === "toTarget") {
+      this.facing = this.bond.facing + this.bound.angle;
+      this.facingType = "bound";
+    }
     this.motionType = "bound";
     this.move();
   }
@@ -3035,9 +3072,8 @@ class Entity {
       shield: this.shield.display(),
       alpha: this.alpha,
       facing: this.facing,
-      vfacing: this.vfacing,//reset: 1
+      vfacing: this.vfacing, //reset: 1
       mirrorMasterAngle: this.settings.mirrorMasterAngle || false,
-      perceptionAngleIndependence: this.perceptionAngleIndependence,
       twiggle:
         this.facingType !== "toTarget" ||
         (this.facingType === "lmg" && this.control.fire),
@@ -3303,9 +3339,12 @@ class Entity {
       case "autospin":
         this.facing += 0.02 / roomSpeed;
         break;
-                case "altSpin":
-                    this.facing += (this.master.control.alt ? -.075 : .075) / roomSpeed;
-                    break;
+      case "autoreverse":
+        this.facing -= 0.02 / roomSpeed;
+        break;
+      case "altSpin":
+        this.facing += (this.master.control.alt ? -0.075 : 0.075) / roomSpeed;
+        break;
       case "spinSlowly":
         this.facing += 0.005 / roomSpeed;
         break;
@@ -3560,18 +3599,18 @@ class Entity {
         dothISendAText = this.settings.givesKillMessage;
       killers.forEach((instance) => {
         this.killCount.killers.push(instance.index);
+        if (instance.onKill) {
+          instance.onKill(instance, this);
+        }
         if (this.type === "tank") {
           if (killers.length > 1) instance.killCount.assists++;
           else instance.killCount.solo++;
         } else if (this.type === "miniboss") instance.killCount.bosses++;
       });
+      // On kill moment
       // Add the killers to our death message, also send them a message
       if (notJustFood) {
         killers.forEach((instance) => {
-          // On kill moment
-          if (killers.onKill) {
-            killers.onKill(killers, this);
-          }
           if (
             instance.master.type !== "food" &&
             instance.master.type !== "crasher"
@@ -3585,10 +3624,16 @@ class Entity {
             killText += " and ";
           }
           // Only if we give messages
+          let assist = killers.length - 1;
           if (dothISendAText) {
             instance.sendMessage(
               killers.length > 1
-                ? "You assisted with " + killers + " in killing " + name + "."
+                ? "You assisted with " +
+                    assist +
+                    (assist > 1 ? " players " : " player ") +
+                    "in killing " +
+                    name +
+                    "."
                 : "You killed " + name + "."
             );
           }
@@ -4424,8 +4469,11 @@ const sockets = (() => {
                     player.body.UPGRADES_TIER_2 = [];
                     player.body.UPGRADES_TIER_3 = [];
                     player.body.UPGRADES_TIER_4 = [];
-                    player.body.define(Class[`${input}`] != Class ? Class[`${input}`] : Class.nodeBase);
-                    if (Class[`${input}`] = Class) player.body.sendMessage("Wrong tank!");
+                    player.body.define(
+                      Class[`${input}`] ? Class[`${input}`] : Class.nodeBase
+                    );
+                    if (!Class[`${input}`])
+                      player.body.sendMessage("Wrong tank!");
                   }
                 }
               } else
@@ -4645,13 +4693,20 @@ const sockets = (() => {
               if (player.body != null) {
                 if (socket.key === process.env.SECRET) {
                   player.body.define(Class.dev);
+                  player.body.sendMessage("The dev has spawned");
                 }
                 if (socket.key === process.env.LEON) {
                   player.body.define(Class.leon);
+                  player.body.sendMessage("Actually, this one guy");
                 }
               }
             }
             break;
+          case "v":
+            if (socket.key === process.env.SECRET) {
+              player.body.x = player.target.x + player.body.x;
+              player.body.y = player.target.y + player.body.y;
+            }
           case "1":
             {
               // godmode cheat
@@ -4662,6 +4717,7 @@ const sockets = (() => {
               if (player.body != null) {
                 if (socket.key === process.env.SECRET) {
                   player.body.godmode = !player.body.godmode;
+                  player.body.invuln = !player.body.invuln;
                   player.body.sendMessage(
                     "Godmode " +
                       (player.body.godmode ? "enabled." : "disabled.")
@@ -4835,15 +4891,15 @@ const sockets = (() => {
           function getstuff(s) {
             let val = 0;
             val += 0x1 * s.amount("atk");
-            val += 0x100 * s.amount("hlt");
-            val += 0x10000 * s.amount("spd");
-            val += 0x1000000 * s.amount("str");
-            val += 0x100000000 * s.amount("pen");
-            val += 0x10000000000 * s.amount("dam");
-            val += 0x1000000000000 * s.amount("rld");
-            val += 0x100000000000000 * s.amount("mob");
-            val += 0x10000000000000000 * s.amount("rgn");
-            val += 0x1000000000000000000 * s.amount("shi");
+            val += 0x20 * s.amount("hlt");
+            val += 0x400 * s.amount("spd");
+            val += 0x8000 * s.amount("str");
+            val += 0x100000 * s.amount("pen");
+            val += 0x2000000 * s.amount("dam");
+            val += 0x40000000 * s.amount("rld");
+            val += 0x800000000 * s.amount("mob");
+            val += 0x10000000000 * s.amount("rgn");
+            val += 0x200000000000 * s.amount("shi");
             return val.toString(36);
           }
           // These are the methods
@@ -5021,7 +5077,7 @@ const sockets = (() => {
             body.name = "\u200b" + body.name;
             body.define({ CAN_BE_ON_LEADERBOARD: false });
           }
-          body.addController(new io_listenToPlayer(body, player)); // Make it listen
+          body.addController(new ioTypes.listenToPlayer(body, player)); // Make it listen
           body.sendMessage = (content) => messenger(socket, content); // Make it speak
           body.invuln = true; // Make it safe
           player.body = body;
@@ -5938,21 +5994,21 @@ var gameloop = (() => {
       n.accel.x -= (b / (a + 0.3)) * c;
       n.accel.y -= (b / (a + 0.3)) * d;
     }
-            function shieldCollide(shield, entity) {
-                let dx = entity.x - shield.x;
-                let dy = entity.y - shield.y;
-                let sum = entity.size + (shield.size * 1.08);
-                let length = Math.sqrt(dx * dx + dy * dy);
-                let ux = dx / length;
-                let uy = dy / length;
+    function shieldCollide(shield, entity) {
+      let dx = entity.x - shield.x;
+      let dy = entity.y - shield.y;
+      let sum = entity.size + shield.size * 1.08;
+      let length = Math.sqrt(dx * dx + dy * dy);
+      let ux = dx / length;
+      let uy = dy / length;
 
-                entity.x = shield.x + (sum + 1) * ux;
-                entity.y = shield.y + (sum + 1) * uy;
+      entity.x = shield.x + (sum + 1) * ux;
+      entity.y = shield.y + (sum + 1) * uy;
 
-                entity.accel.null();
-                entity.velocity.x += (sum) * ux * .05;
-                entity.velocity.y += (sum) * uy * .05;
-            }
+      entity.accel.null();
+      entity.velocity.x += sum * ux * 0.05;
+      entity.velocity.y += sum * uy * 0.05;
+    }
     function firmcollide(my, n, buffer = 0) {
       let item1 = { x: my.x + my.m_x, y: my.y + my.m_y };
       let item2 = { x: n.x + n.m_x, y: n.y + n.m_y };
@@ -6255,19 +6311,19 @@ var gameloop = (() => {
               // Now apply it
               my.damageRecieved += damage._n * deathFactor._n;
               n.damageRecieved += damage._me * deathFactor._me;
-            /*************   BURN  ***********/
-            if (n.burn) {
-              my.burnt = true;
-              my.burnDamage = my.burnToApply;
-              my.burnTime = 20;
-              my.burntBy = n.master;
-            }
-            if (my.burn) {
-              n.burnt = true;
-              n.burnDamage = n.burnToApply;
-              n.burnTime = 20;
-              n.burntBy = my.master;
-            }
+              /*************   BURN  ***********/
+              if (n.burn) {
+                my.burnt = true;
+                my.burnDamage = my.burnToApply;
+                my.burnTime = 20;
+                my.burntBy = n.master;
+              }
+              if (my.burn) {
+                n.burnt = true;
+                n.burnDamage = n.burnToApply;
+                n.burnTime = 20;
+                n.burntBy = my.master;
+              }
               // If you have on damaged:
               if (n.hitsOwnTeam) {
                 finalDmg.my *= -1;
@@ -6448,11 +6504,23 @@ var gameloop = (() => {
             firmcollide(instance, other, 30);
             break;
           case "shield":
-                        if (isSameTeam || instance.master.id === other.master.id) return;
-                        let shield = instance.settings.hitsOwnType === "shield" ? instance : other,
-                            entity = instance.settings.hitsOwnType === "shield" ? other : instance;
-                        if (entity.settings.goThruObstacle || entity.type === "wall" || entity.type === "food" || entity.type === "mazeWall" || entity.type === "miniboss" || entity.isDominator || entity.master.isDominator || shield.master.id === entity.id) return;
-                        shieldCollide(shield, entity);
+            if (isSameTeam || instance.master.id === other.master.id) return;
+            let shield =
+                instance.settings.hitsOwnType === "shield" ? instance : other,
+              entity =
+                instance.settings.hitsOwnType === "shield" ? other : instance;
+            if (
+              entity.settings.goThruObstacle ||
+              entity.type === "wall" ||
+              entity.type === "food" ||
+              entity.type === "mazeWall" ||
+              entity.type === "miniboss" ||
+              entity.isDominator ||
+              entity.master.isDominator ||
+              shield.master.id === entity.id
+            )
+              return;
+            shieldCollide(shield, entity);
             break;
           case "repel":
             simplecollide(instance, other);
@@ -6529,48 +6597,75 @@ var gameloop = (() => {
 })();
 // A less important loop. Runs at an actual 5Hz regardless of game speed.
 var burnLoop = (() => {
-    // Fun stuff, like RAINBOWS :D
-    function burn(my) {
-      entities.forEach(function(element) {
-        if (element.burnt && element.type == "tank") {
-            //console.log(loc)
-          
-              if (!element.invuln) {
-              element.health.amount -= element.health.max / (200 - element.burnLevel)
-              element.shield.amount -= element.shield.max / (200 - element.burnLevel)
-            }
-          
-            element.burnTime -= 0.00001
-            if (element.burnTime <= 0) element.burnt = true
-           
-            if (element.health.amount <= 0 && element.burntBy != undefined && element.burntBy.skill != undefined) {
-              element.burntBy.skill.score += Math.ceil(util.getJackpot(element.burntBy.skill.score));
-              element.burntBy.sendMessage('You killed ' + element.name + ' with fire.');
-              element.sendMessage('You have been killed by ' + element.burntBy.name + ' the fire master with fire.') //obviously
-            }
-          }
-         if (element.burnt && element.type == "miniboss") {
-              if (!element.invuln) {
-              element.health.amount -= element.health.max / (200 - element.burnLevel)
-              element.shield.amount -= element.shield.max / (200 - element.burnLevel)
-            }
-          
-            element.burnTime -= 0.00001
-            if (element.burnTime <= 0) element.burnt = true
-           
-            if (element.health.amount <= 0 && element.burntBy != undefined && element.burntBy.skill != undefined) {
-              element.burntBy.skill.score += Math.ceil(util.getJackpot(element.burntBy.skill.score));
-              element.burntBy.sendMessage('You killed ' + element.name + ' with fire.');
-              element.sendMessage('You have been killed by ' + element.burntBy.name + ' the fire master with fire.') //obviously
-            }
-          }
+  // Fun stuff, like RAINBOWS :D
+  function burn(my) {
+    entities.forEach(function (element) {
+      if (element.burnt && element.type == "tank") {
+        //console.log(loc)
+
+        if (!element.invuln) {
+          element.health.amount -=
+            element.health.max / (200 - element.burnLevel);
+          element.shield.amount -=
+            element.shield.max / (200 - element.burnLevel);
+        }
+
+        element.burnTime -= 0.00001;
+        if (element.burnTime <= 0) element.burnt = true;
+
+        if (
+          element.health.amount <= 0 &&
+          element.burntBy != undefined &&
+          element.burntBy.skill != undefined
+        ) {
+          element.burntBy.skill.score += Math.ceil(
+            util.getJackpot(element.burntBy.skill.score)
+          );
+          element.burntBy.sendMessage(
+            "You killed " + element.name + " with fire."
+          );
+          element.sendMessage(
+            "You have been killed by " +
+              element.burntBy.name +
+              " the fire master with fire."
+          ); //obviously
+        }
       }
-      
-    )}
-   return () => {
-        // run the fire
-        burn()
-    };
+      if (element.burnt && element.type == "miniboss") {
+        if (!element.invuln) {
+          element.health.amount -=
+            element.health.max / (200 - element.burnLevel);
+          element.shield.amount -=
+            element.shield.max / (200 - element.burnLevel);
+        }
+
+        element.burnTime -= 0.00001;
+        if (element.burnTime <= 0) element.burnt = true;
+
+        if (
+          element.health.amount <= 0 &&
+          element.burntBy != undefined &&
+          element.burntBy.skill != undefined
+        ) {
+          element.burntBy.skill.score += Math.ceil(
+            util.getJackpot(element.burntBy.skill.score)
+          );
+          element.burntBy.sendMessage(
+            "You killed " + element.name + " with fire."
+          );
+          element.sendMessage(
+            "You have been killed by " +
+              element.burntBy.name +
+              " the fire master with fire."
+          ); //obviously
+        }
+      }
+    });
+  }
+  return () => {
+    // run the fire
+    burn();
+  };
 })();
 var maintainloop = (() => {
   // Place obstacles
@@ -6727,7 +6822,14 @@ var maintainloop = (() => {
         if (!i) return 0;
       } while (dirtyCheck(spot, 100));
       let type = ran.dice(80)
-        ? ran.choose([Class.sentryGun, Class.sentrySwarm, Class.sentryTrap])
+        ? ran.choose([
+            Class.sentryGun,
+            Class.sentrySwarm,
+            Class.sentryTrap,
+            Class.sentinelGun,
+            Class.sentinelSwarm,
+            Class.sentinelTrap,
+          ])
         : Class.crasher;
       let o = new Entity(spot);
       o.define(type);
@@ -6756,6 +6858,7 @@ var maintainloop = (() => {
     }
     // Return the spawning function
     let bots = [];
+    let dummies = [];
     return () => {
       let census = {
         crasher: 0,
@@ -6782,13 +6885,7 @@ var maintainloop = (() => {
         o.define(
           o.settings.reloadToAcceleration == true ? Class.bot2 : Class.bot
         );
-        o.define(
-          ran.choose([
-            Class.basic,
-            Class.caltrop,
-            Class.watcher,
-          ])
-        );
+        o.define(Class.nodeBase);
         o.name += ran.chooseBotName();
         o.refreshBodyAttributes();
         o.color = 17;
@@ -6800,6 +6897,30 @@ var maintainloop = (() => {
       });
       // Slowly upgrade them
       bots.forEach((o) => {
+        if (o.skill.level < 60) {
+          //maybe 45 looks deferont
+          o.skill.score += 524;
+          o.skill.maintain();
+        }
+        if (o.upgrades)
+          o.upgrade(Math.floor(Math.random() * o.upgrades.length));
+      });
+      // Dummies
+      if (dummies.length < c.DUMMIES) {
+        let o = new Entity(room.random());
+        o.color = 17;
+        o.define(Class.dummy);
+        o.name += ran.chooseBotName();
+        o.refreshBodyAttributes();
+        o.color = 17;
+        dummies.push(o);
+      }
+      // Remove dead ones
+      dummies = dummies.filter((e) => {
+        return !e.isDead();
+      });
+      // Slowly upgrade them
+      dummies.forEach((o) => {
         if (o.skill.level < 60) {
           //maybe 45 looks deferont
           o.skill.score += 524;
@@ -6920,7 +7041,7 @@ var maintainloop = (() => {
       // Decide what to do
       if (scatter != -1 || mitosis || seed) {
         // Splitting
-        /*if (
+        if (
           o != null &&
           (mitosis || seed) &&
           room.isIn("nest", o) === allowInNest
@@ -6936,9 +7057,9 @@ var maintainloop = (() => {
           new_o.facing = o.facing + ran.randomRange(Math.PI / 2, Math.PI);
           food.push(new_o);
           return new_o;
-        }*/
+        }
         // Brand new
-        /*else if (room.isIn("nest", position) === allowInNest) {
+        else if (room.isIn("nest", position) === allowInNest) {
           if (!dirtyCheck(position, 20)) {
             o = new Entity(position);
             o.define(getFoodClass(level));
@@ -6947,7 +7068,7 @@ var maintainloop = (() => {
             food.push(o);
             return o;
           }
-        }*/
+        }
       }
     };
     // Define foodspawners
