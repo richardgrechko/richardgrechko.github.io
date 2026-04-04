@@ -111,7 +111,7 @@ class Decimal {
     return this.pow(v.recip())
   }
   neg() {
-    this.sign *= -1;
+    this.sign = 0-this.sign;
     return this
   }
   comp(v) {
