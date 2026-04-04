@@ -118,11 +118,11 @@ class Decimal {
     v = v instanceof Decimal ? v : new Decimal(v)
     var sigman = this.man*this.sign
     var vsigman = v.man*v.sign
-    if(this.exp==v.exp&&this.man==v.man&&this.sign==v.sign) return 0
-    if(this.exp==v.exp&&sigman>vsigman) return 1
-    if(this.exp>v.exp) return 1
-    if(this.exp==v.exp&&sigman<vsigman) return -1
-    if(this.exp<v.exp) return -1
+    if(this.exp==v.exp&&sigman>vsigman) {return 1};
+    if(this.exp>v.exp) {return 1};
+    if(this.exp==v.exp&&sigman<vsigman) {return -1};
+    if(this.exp<v.exp) {return -1};
+    return 0
   }
   eq(v) {
     return this.comp(v)===0
