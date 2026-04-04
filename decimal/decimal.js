@@ -114,6 +114,10 @@ class Decimal {
     this.sign = 0-this.sign;
     return this
   }
+  abs() {
+    this.sign = (this.sign===-1)?1:this.sign;
+    return this
+  }
   comp(v) {
     v = v instanceof Decimal ? v : new Decimal(v)
     var sigman = this.man*this.sign
