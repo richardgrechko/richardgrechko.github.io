@@ -164,5 +164,14 @@ class Decimal {
       }
     }
   }
+  toString() {
+    if (Math.abs(this.exp)>=1000000){
+      return "e"+this.log10()
+    }else if(Math.abs(this.exp)>=15){
+      return (this.sign*this.mantissa)+"e"+this.exponent
+    }else{
+      return (this.mantissa*10**this.exponent).toString()
+    }
+  }
 }
 window.Decimal = Decimal
