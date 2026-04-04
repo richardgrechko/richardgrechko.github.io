@@ -155,7 +155,8 @@ class Decimal {
   fix() {
     if(this.man===0){this.exp=0;this.sign=0;return}
     while (true) {
-      if(this===Decimal.NaN&&this===Decimal.Inf)return
+      if(this.man===Infinity&&this.exp===Infinity)return Decimal.Inf
+      if(this.man===NaN&&this.exp===NaN)return Decimal.NaN
       if(this.comp(0)===0)return
       if (this.man>=10) {
         this.man/=10
@@ -169,6 +170,7 @@ class Decimal {
     }
   }
   toString() {
+    if(this.man===Infinity&&this.exp===Infinity)return "inf"
     if (Math.abs(this.exp)>=1000000){
       return "e"+this.log10()
     }else if(Math.abs(this.exp)>=15){
