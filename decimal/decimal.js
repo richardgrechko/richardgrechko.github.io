@@ -43,6 +43,8 @@ class Decimal {
   }
   add(v) {
     v = v instanceof Decimal ? v : new Decimal(v)
+    if(this.exp-v.exp>15)return this
+    if(this.exp-v.exp<-15)return v
     this.man += v.sign*v.man/10**(this.exp-v.exp)
     this.fix()
     return this
