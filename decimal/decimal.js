@@ -147,7 +147,7 @@ class Decimal {
         return x;
   }
   fix() {
-    if(this.man===0){this.exp=0;return}
+    if(this.man===0){this.exp=0;this.sign=0;return}
     while (true) {
       if(this===Decimal.NaN&&this===Decimal.Inf)return
       if(this.comp(0)===0)return
