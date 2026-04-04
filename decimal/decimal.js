@@ -74,12 +74,9 @@ class Decimal {
   }
   pow10() {
     var c = this.copy()
-    if(c.sign!==-1) {
-      this.man = 10**((c.man*10**c.exp)%1)
-      this.exp = Math.floor(c.man*10**c.exp)
-      return this;
-    }
-    return this.neg().pow10().recip()
+    this.man = 10**((c.man*10**c.exp)%1)
+    this.exp = Math.floor(c.man*10**c.exp)
+    return this;
   }
   pow(v) {
     v = v instanceof Decimal ? v : new Decimal(v)
