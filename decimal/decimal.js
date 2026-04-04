@@ -9,7 +9,7 @@ class Decimal {
   }
   static get Inf() {
         const x = Object.create(Decimal.prototype);
-        x.man = NaN;
+        x.man = Infinity;
         x.exp = Infinity;
         x.sign = 1
         return x;
