@@ -154,7 +154,7 @@ class Decimal {
       if (this.man>=10) {
         this.man/=10
         this.exp++
-      } else if (this.man<=0.1) {
+      } else if (this.man<1) {
         this.man*=10
         this.exp--
       } else {
