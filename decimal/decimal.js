@@ -168,9 +168,9 @@ class Decimal {
     if (Math.abs(this.exp)>=1000000){
       return "e"+this.log10()
     }else if(Math.abs(this.exp)>=15){
-      return (this.sign*this.mantissa)+"e"+this.exponent
+      return (this.sign*this.man)+"e"+this.exp
     }else{
-      return (this.mantissa*10**this.exponent).toString()
+      return (this.sign*this.man*10**this.exp).toString()
     }
   }
 }
