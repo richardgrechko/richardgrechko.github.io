@@ -122,7 +122,7 @@ class Decimal {
     if(this.exp>v.exp) return 1
     if(this.exp==v.exp&&sigman<vsigman) return -1
     if(this.exp<v.exp) return -1
-    if(this==v) return 0
+    if(this.exp==v.exp&&this.man==v.man&&this.sign==v.sign) return 0
   }
   eq(v) {
     return this.comp(v)===0
