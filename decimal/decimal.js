@@ -4,12 +4,12 @@ class Decimal {
         const x = Object.create(Decimal.prototype);
         x.man = NaN;
         x.exp = NaN;
-        x.sign = NaN
+        x.sign = 1
         return x;
   }
   static get Inf() {
         const x = Object.create(Decimal.prototype);
-        x.man = Infinity;
+        x.man = NaN;
         x.exp = Infinity;
         x.sign = 1
         return x;
@@ -74,7 +74,7 @@ class Decimal {
   }
   pow10() {
     var c = this.copy()
-    if(this.gte(0)) {
+    if(c.sign!==-1) {
       this.man = 10**((c.man*10**c.exp)%1)
       this.exp = Math.floor(c.man*10**c.exp)
       return this;
@@ -85,7 +85,7 @@ class Decimal {
     v = v instanceof Decimal ? v : new Decimal(v)
     if(v.sign===-1) {
       return this.pow(v.neg()).recip()
-    }else if(v.sign===0){
+    }else if(v.eq(0)){
       return new Decimal(1)
     }else if(v.lt(1023)&&v.gte(1)){
       return this.mul(this.pow(v.sub(1)))
@@ -170,7 +170,7 @@ class Decimal {
     }
   }
   toString() {
-    if(this.man===Infinity&&this.exp===Infinity)return "inf"
+    if(this.man===NaN&&this.exp===Infinity)return "inf"
     if (Math.abs(this.exp)>=1000000){
       return "e"+this.log10()
     }else if(Math.abs(this.exp)>=15){
