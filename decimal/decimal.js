@@ -161,7 +161,7 @@ class Decimal {
   }
   fix() {
     if(this.man===0){this.exp=0;this.sign=0;return}
-    if(this.sign===-1){
+    if(this.man<0){
       this.man=0-this.man
       this.sign=0-this.sign
     }
@@ -178,6 +178,7 @@ class Decimal {
       } else {
         break;
       }
+      console.log(this)
     }
     return;
   }
