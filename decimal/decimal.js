@@ -178,7 +178,6 @@ class Decimal {
       } else {
         break;
       }
-      console.log(this)
     }
     return;
   }
