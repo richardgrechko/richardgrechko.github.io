@@ -7,7 +7,7 @@ class Decimal {
         x.sign = 1
         return x;
   }
-  static set NaN(a) {
+  static set NaN(_) {
     throw new Error("This number is readonly")
   }
   static get Inf() {
@@ -17,7 +17,7 @@ class Decimal {
         x.sign = 1
         return x;
   }
-  static set Inf(a) {
+  static set Inf(_) {
     throw new Error("This number is readonly")
   }
   static E = new Decimal(Math.E)
