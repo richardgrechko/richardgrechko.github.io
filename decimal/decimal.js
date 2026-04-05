@@ -7,12 +7,18 @@ class Decimal {
         x.sign = 1
         return x;
   }
+  static set NaN() {
+    throw new Error("This number is readonly")
+  }
   static get Inf() {
         const x = Object.create(Decimal.prototype);
         x.man = NaN;
         x.exp = Infinity;
         x.sign = 1
         return x;
+  }
+  static set Inf() {
+    throw new Error("This number is readonly")
   }
   static E = new Decimal(Math.E)
   static PI = new Decimal(Math.PI)
@@ -74,7 +80,11 @@ class Decimal {
   }
   pow10() {
     var c = this.copy()
-    this.man = 10**((c.man*10**c.exp)%1)
+    if (this.sign!==-1){
+      this.man = 10**((c.man*10**c.exp)%1)
+    }else{
+      this.man = 10**(1-(c.man*10**c.exp)%1)
+    }
     this.exp = Math.floor(c.man*10**c.exp)
     return this;
   }
