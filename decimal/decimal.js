@@ -52,7 +52,7 @@ class Decimal {
     if(this.exp-v.exp>15)return this
     if(this.exp-v.exp<-15)return v
     this.man += v.sign*v.man/10**(this.exp-v.exp)
-    //this.fix()
+    this.fix()
     return this
   }
   sub(v) { 
@@ -161,6 +161,10 @@ class Decimal {
   }
   fix() {
     if(this.man===0){this.exp=0;this.sign=0;return}
+    if(this.sign===-1){
+      this.man=0-this.man
+      this.sign=0-this.sign
+    }
     while (true) {
       if(this.man===Infinity&&this.exp===Infinity)return Decimal.Inf
       if(this.man===NaN&&this.exp===NaN)return Decimal.NaN
