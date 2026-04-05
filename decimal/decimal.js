@@ -166,7 +166,7 @@ class Decimal {
       this.sign=0-this.sign
     }
     while (true) {
-      if(this.man===Infinity&&this.exp===Infinity)return Decimal.Inf
+      if(this.man===NaN&&this.exp===Infinity)return Decimal.Inf
       if(this.man===NaN&&this.exp===NaN)return Decimal.NaN
       if(this.comp(0)===0)return
       if (this.man>=10) {
