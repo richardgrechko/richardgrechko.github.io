@@ -182,7 +182,7 @@ class Decimal {
     return;
   }
   toString() {
-    if(this.man===NaN&&this.exp===Infinity)return "inf"
+    if(this.exp===Infinity)return "inf"
     if (Math.abs(this.exp)>=1000000){
       return "e"+this.log10()
     }else if(Math.abs(this.exp)>=15){
