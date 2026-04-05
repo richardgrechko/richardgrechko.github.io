@@ -22,7 +22,7 @@ class Decimal {
   }
   static E = new Decimal(Math.E)
   static PI = new Decimal(Math.PI)
-  static TAU = Decimal.PI.mul(2)
+  static TAU = PI.clone().mul(2)
   static PHI = new Decimal(1).add(new Decimal(5).sqrt()).div(2)
   constructor(n) {
     const isNum = /^(?<s>[+-])?(?:(?<i>\d+)(?:\.(?<f>\d*))?|\.(?<f2>\d+))(?:[Ee](?<es>[+-])?(?<e>\d+))?$/;
@@ -75,8 +75,8 @@ class Decimal {
     this.fix()
     return this
   }
-  recip(v) {
-    return new Decimal(1).div(v)
+  recip() {
+    return new Decimal(1).div(this)
   }
   pow10() {
     var c = this.copy()
@@ -159,6 +159,7 @@ class Decimal {
         x.sign = this.sign
         return x;
   }
+  clone() { return this.copy() }
   fix() {
     if(this.man===0){this.exp=0;this.sign=0;return}
     if(this.man<0){
