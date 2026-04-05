@@ -191,5 +191,20 @@ class Decimal {
       return (this.sign*this.man*10**this.exp).toString()
     }
   }
+  toFixed(fixed=3) {
+    let k = (this.sign*this.man*10**this.exp).toString().split(".")
+    let m = (this.sign*this.man).toString().split(".")
+    [k[1],m[1]] ??= Array(2).fill("0".repeat(fixed))
+    k[1] = Math.floor(Math.abs((this.sign*this.man*10**(this.exp+fixed))%10**fixed))/10**fixed
+    m[1] = Math.floor(Math.abs((this.sign*this.man*10**fixed)%10**fixed))/10**fixed
+    if(this.exp===Infinity)return "inf"
+    if (Math.abs(this.exp)>=1000000){
+      return "e"+this.log10()
+    }else if(Math.abs(this.exp)>=15){
+      return m.join(".")+"e"+this.exp
+    }else{
+      return k.join(".")
+    }
+  }
 }
 window.Decimal = Decimal
