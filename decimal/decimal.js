@@ -22,7 +22,7 @@ class Decimal {
   }
   static E = new Decimal(Math.E)
   static PI = new Decimal(Math.PI)
-  static TAU = PI.clone().mul(2)
+  static TAU = Decimal.PI.clone().mul(2)
   static PHI = new Decimal(1).add(new Decimal(5).sqrt()).div(2)
   constructor(n) {
     const isNum = /^(?<s>[+-])?(?:(?<i>\d+)(?:\.(?<f>\d*))?|\.(?<f2>\d+))(?:[Ee](?<es>[+-])?(?<e>\d+))?$/;
