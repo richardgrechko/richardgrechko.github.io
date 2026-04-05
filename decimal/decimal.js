@@ -176,9 +176,10 @@ class Decimal {
         this.man*=10
         this.exp--
       } else {
-        return;
+        break;
       }
     }
+    return;
   }
   toString() {
     if(this.man===NaN&&this.exp===Infinity)return "inf"
