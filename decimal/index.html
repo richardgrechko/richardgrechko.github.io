@@ -28,7 +28,7 @@
 				try{
 					document.getElementById("output").innerHTML=Function(document.getElementById("input").value)(); 
 				}catch(error){
-					document.getElementById("output").innerHTML=`<span style="color: #f00">${sanitize(error)}</span>`; 
+					document.getElementById("output").innerHTML=`<span style="color: #f00">${sanitize(error.stack).split("\n").join("<br>")}</span>`; 
 				}
 			}
 		}
