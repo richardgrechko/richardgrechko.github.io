@@ -22,9 +22,11 @@
 		function load() {
 			elementid("button").onclick = _ => { 
 				try{
-					document.getElementById("output").innerHTML=Function(document.getElementById("input").value)(); 
+					document.getElementById("output").innerHTML=`<span></span>`
+					document.getElementById("output").textContent=Function(document.getElementById("input").value)(); 
 				}catch(error){
-					document.getElementById("output").innerHTML=`<span style="color: #f00">${error.stack}</span>`
+					document.getElementById("output").innerHTML=`<span style="color: #f00"></span>`
+					document.getElementById("output").textContent=error; 
 				}
 			}
 		}
