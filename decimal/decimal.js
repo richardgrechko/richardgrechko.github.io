@@ -25,27 +25,27 @@ class Decimal {
   static TAU = Decimal.PI.clone().mul(2)
   static PHI = new Decimal(1).add(new Decimal(5).sqrt()).div(2)
   constructor(n) {
-    const isNum = /^(?<s>[+-])?(?:(?<i>\d+)(?:\.(?<f>\d*))?|\.(?<f2>\d+))(?:[Ee](?<es>[+-])?(?<e>\d+))?$/;
-    const s = typeof n === "string" ? n : (n??"NaN").toString()
-        const ss = s.trim();
-        const m = ss.match(isNum);
-        if (!m) {
-            return Decimal.NaN
-        }
-        const g = m.groups;
-        const sign = g.s === "-" ? -1 : 1;
-        const expSign = g.es === "-" ? -1 : 1;
-        this.exp = 0;
-        // Extract fraction
-        let fPart = g.f ?? g.f2 ?? "";
-        // Combine integer with fraction
-        let digits = (g.i ?? "0") + fPart;
-        digits = digits.replace(/^0+/, ""); // Remove leading zeros
-        this.man = Number(digits || 0);
-        this.exp = expSign * Number(g.e||0) - fPart.length;
-        this.sign = (this.man===0)?0:sign
-        this.fix()
-        if ((g.e??"0").replaceAll(/i[\s]n[\s]f/gi,"Inf").includes("inf")||(digits??"0").replaceAll(/i[\s]n[\s]f/gi,"Inf").includes("inf")) { return (expSign==1)?Decimal.Inf:new Decimal(0) }
+    // from websim: Incremental: Infinities
+    const raw = (typeof n === "string") ? n : (n == null ? "NaN" : String(n));
+    const s = raw.trim();
+    const isNum = /^([+-])?((\d+)(?:\.(\d*))?|\.(\d+))(?:[Ee]([+-])?(\d+))?$/;
+    const m = s.match(isNum);
+    if (!m) {
+      return Decimal.NaN;
+    }
+    const sign = m[1] === "-" ? -1 : 1;
+    const expSign = m[6] === "-" ? -1 : 1;
+    const fPart = (m[4] ?? m[5] ?? "");
+    let digits = (m[3] ?? "0") + fPart;
+    digits = digits.replace(/^0+/, "");
+    this.man = Number(digits || 0);
+    this.exp = expSign * Number(m[7] || 0) - fPart.length;
+    this.sign = (this.man === 0) ? 0 : sign;
+    this.fix();
+    if ((m[7] ?? "0").toString().toLowerCase().includes("inf") ||
+        (digits ?? "0").toString().toLowerCase().includes("inf")) {
+      return (expSign == 1) ? Decimal.Inf : new Decimal(0);
+    }
   }
   add(v) {
     v = v instanceof Decimal ? v : new Decimal(v)
@@ -197,10 +197,11 @@ class Decimal {
     var m = (this.sign*this.man).toString().split(".")
     k[1] = Math.floor(Math.abs((this.sign*this.man*10**(this.exp+fixed))%10**fixed)).toString().padStart(fixed,0)
     m[1] = Math.floor(Math.abs((this.sign*this.man*10**fixed)%10**fixed)).toString().padStart(fixed,0)
+    if(this.eq(0))return "0."+"0".repeat(fixed)
     if(this.exp===Infinity)return "inf"
     if (Math.abs(this.exp)>=1000000){
       return "e"+this.log10().toFixed(fixed)
-    }else if(Math.abs(this.exp)>=15){
+    }else if(Math.abs(this.exp)>=6){
       return m.join(".")+"e"+this.exp
     }else{
       return k.join(".")
