@@ -125,7 +125,7 @@ class Decimal {
   }
   root(v) {
     v = v instanceof Decimal ? v : new Decimal(v)
-    let c = c.copy()
+    let c = this.copy()
     return c.pow(v.recip())
   }
   neg() {
