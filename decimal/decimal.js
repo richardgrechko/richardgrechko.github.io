@@ -49,34 +49,39 @@ class Decimal {
   }
   add(v) {
     v = v instanceof Decimal ? v : new Decimal(v)
-    if(this.exp-v.exp>15)return this
+    let c = this.copy()
+    if(this.exp-v.exp>15)return c
     if(this.exp-v.exp<-15)return v
-    this.man += v.sign*v.man/10**(this.exp-v.exp)
-    this.fix()
-    return this
+    c.man += v.sign*v.man/10**(c.exp-v.exp)
+    c.fix()
+    return c
   }
   sub(v) { 
     v = v instanceof Decimal ? v : new Decimal(v)
-    return this.add(v.neg())
+    let c = this.copy()
+    return c.add(v.neg())
   }
   mul(v) {
     v = v instanceof Decimal ? v : new Decimal(v)
-    this.man *= v.man
-    this.exp += v.exp
-    if(v.sign===-1)this.sign*=-1
-    this.fix()
-    return this
+    let c = this.copy()
+    c.man *= v.man
+    c.exp += v.exp
+    if(v.sign===-1)c.sign*=-1
+    c.fix()
+    return c
   }
   div(v) {
     v = v instanceof Decimal ? v : new Decimal(v)
-    this.man /= v.man
-    this.exp -= v.exp
-    if(v.sign===-1)this.sign*=-1
-    this.fix()
-    return this
+    let c = this.copy()
+    c.man /= v.man
+    c.exp -= v.exp
+    if(v.sign===-1)c.sign*=-1
+    c.fix()
+    return c
   }
   recip() {
-    return new Decimal(1).div(this)
+    let c = this.copy()
+    return new Decimal(1).div(c)
   }
   pow10() {
     var c = this.copy()
@@ -90,40 +95,48 @@ class Decimal {
   }
   pow(v) {
     v = v instanceof Decimal ? v : new Decimal(v)
+    let c = this.copy()
     if(v.sign===-1) {
-      return this.pow(v.neg()).recip()
+      return c.pow(v.neg()).recip()
     }else if(v.eq(0)){
       return new Decimal(1)
     }else if(v.lt(1023)&&v.gte(1)){
-      return this.mul(this.pow(v.sub(1)))
+      return c.mul(c.pow(v.sub(1)))
     }else{
-      return v.mul(this.log10()).pow10()
+      return v.mul(c.log10()).pow10()
     }
   }
   log10() {
-    return (this.sign===1||this.sign===0)?new Decimal(this.exp+Math.log10(this.man)):Decimal.NaN
+    let c = this.copy()
+    return (c.sign===1||c.sign===0)?new Decimal(c.exp+Math.log10(c.man)):Decimal.NaN
   }
   log(v) {
     v = v instanceof Decimal ? v : new Decimal(v)
-    return this.log10().div(v.log10())
+    let c = this.copy()
+    return c.log10().div(v.log10())
   }
   sqrt() {
-    return this.root(2)
+    let c = this.copy()
+    return c.root(2)
   }
   cbrt() {
-    return this.root(3)
+    let c = this.copy()
+    return c.root(3)
   }
   root(v) {
     v = v instanceof Decimal ? v : new Decimal(v)
-    return this.pow(v.recip())
+    let c = c.copy()
+    return c.pow(v.recip())
   }
   neg() {
-    this.sign = 0-this.sign;
-    return this
+    let c = this.copy()
+    c.sign = 0-c.sign;
+    return c
   }
   abs() {
-    this.sign = (this.sign===-1)?1:this.sign;
-    return this
+    let c = this.copy()
+    c.sign = (c.sign===-1)?1:c.sign;
+    return c
   }
   comp(v) {
     v = v instanceof Decimal ? v : new Decimal(v)
