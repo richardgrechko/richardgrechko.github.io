@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>richardgrechko websites.</title>
+    <meta name="description" content="those are the websites."/>
+    <meta name="og:title" content="richardgrechko websites."/>
+    <meta name="og:description" content="those are the websites."/>
+</head>
+<body>
+    <style>
+        html {
+          background-color: black;
+          color: white;
+          font: Segoe UI;
+        }
+        #input-user {
+          background-color: black;
+          color: white;
+          font: Segoe UI;
+          width: 100%;
+          z-index: 100;
+        }
+        link {
+          color: #34A6E0;
+        }
+    </style>
+    <div id="input-user">
+      <h1>Input username</h1>
+      <input type="text" placeholder="Type your username here..."/>
+    </div>
+    <div id="chatbox">
+      <div id="chat"></div>
+      <div id="msgcontainer"><input id="msginput" type="text" placeholder="Type your message here..."/><button id="sendmsg">Send</button></div>
+    </div>
+  <script>
+    let ws = new WebSocket("wss://"+location.host+location.pathname+"/ws")
+console.log("Connected to websocket")
+  </script>
+</body>
+</html>
