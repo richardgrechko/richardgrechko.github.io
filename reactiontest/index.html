@@ -14,11 +14,16 @@
           color: black;
           font: Segoe UI;
         }
-      #app {
-        padding: 0;
-        cursor: pointer;
-        background-color: #f00;
-      }
+        body {
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            cursor: pointer;
+            background-color: #f00;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
       #time {
         font-size: 24px;
       }
@@ -26,10 +31,8 @@
         font-size: 17px;
       }
     </style>
-    <div id="app" style="background-color: #f00">
-      <div id="time">Testing</div>
-      <div id="rank">Click to see what rank you got!</div>
-    </div>
+    <div id="time">00:00.000</div>
+    <div id="rank">Click to see what rank you got!</div>
   <script>
     let sec5 = performance.now()+5000;
     let time = performance.now();
@@ -60,7 +63,8 @@
       createRank(name,min,max) {
         if (this.input >= min && this.input < max) {
           this.rank = name
-        }
+        };
+          return this
       }
     };
     let ranks = {
@@ -75,11 +79,11 @@
     let interval = setInterval(_=>{
       time = performance.now()-sec5;
       if (time >= 0) {
-        document.getElementById("app").style.backgroundColor = "#0f0";
+        document.body.style.backgroundColor = "#0f0";
         document.getElementById("time").textContent = timeFormat(time)
       }
     },16);
-    document.getElementById("app").addEventListener("click",_=>{
+    document.body.addEventListener("click",_=>{
       clearInterval(interval)
       let yourrank = new Ranking(time);
       for (let i in ranks) {
