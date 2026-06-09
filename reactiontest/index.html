@@ -1,1 +1,92 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>richardgrechko websites.</title>
+    <meta name="description" content="those are the websites."/>
+    <meta name="og:title" content="richardgrechko websites."/>
+    <meta name="og:description" content="those are the websites."/>
+</head>
+<body>
+    <style>
+        html {
+          background-color: black;
+          color: black;
+          font: Segoe UI;
+        }
+      #app {
+        padding: 0;
+        cursor: pointer;
+        background-color: #f00;
+      }
+      #time {
+        font-size: 24px;
+      }
+      #rank {
+        font-size: 17px;
+      }
+    </style>
+    <div id="app" style="background-color: #f00">
+      <div id="time">Testing</div>
+      <div id="rank">Click to see what rank you got!</div>
+    </div>
+  <script>
+    let sec5 = performance.now()+5000;
+    let time = performance.now();
+    function timeFormat(millis) {
+    	if (millis >= 31_556_952_000_000_000_000) {
+    		return `${Math.floor(millis/31_556_952_000_000_000_000)} eons ${Math.floor(millis/31_556_952_000_000_000)%1000} eras`
+    	} else if (millis >= 31_556_952_000_000_000) {
+    		return `${Math.floor(millis/31_556_952_000_000_000)} eras ${Math.floor(millis/31_556_952_000_000)%1000} millennia`
+    	} else if (millis >= 31_556_952_000_000) {
+    		return `${Math.floor(millis/31_556_952_000_000)} millennia ${Math.floor(millis/31_556_952_000)%1000}y`
+    	} else if (millis >= 31_556_952_000) {
+    		return `${Math.floor(millis/31_556_952_000)}y ${timeFormat(millis%31_556_952_000)}`
+    	} else if (millis >= 86_400_000) {
+    		return `${Math.floor(millis/86_400_000)}d ${timeFormat(millis%86_400_000)}`
+    	} else if (millis >= 3_600_000) {
+    		return `${Math.floor(millis/3_600_000).toString().padStart(2,"0")}:${timeFormat(millis%3_600_000)}`
+    	} else if (millis >= 0 && millis < 3_600_000) {
+    		return `${Math.floor(millis/60_000).toString().padStart(2,"0")}:${Math.floor((millis/1_000)%60).toString().padStart(2,"0")}.${Math.floor(millis%1_000).toString().padStart(3,"0")}`
+    	} else {
+    		return `00:00.000`
+    	}
+    }
+    class Ranking {
+      constructor(input) {
+        this.rank = "Too Early!";
+        this.input = input
+      };
+      createRank(name,min,max) {
+        if (this.input >= min && this.input < max) {
+          this.rank = name
+        }
+      }
+    };
+    let ranks = {
+      (`Perfect!!`): [0,50],
+      (`Excellent!`): [50,100],
+      (`Great!`): [100,250],
+      (`Good`): [250,500],
+      (`Okay`): [500,1000],
+      (`Late`): [1000,2500],
+      (`Too Late!`): [2500,Infinity],
+    };
+    let interval = setInterval(_=>{
+      time = performance.now()-sec5;
+      if (time >= 0) {
+        document.getElementById("app").style.backgroundColor = "#0f0";
+        document.getElementById("time").textContent = timeFormat(time)
+      }
+    },16);
+    document.getElementById("app").addEventListener("click",_=>{
+      clearInterval(interval)
+      let yourrank = new Ranking(time);
+      for (let i in ranks) {
+        yourrank = yourrank.createRank(i,...ranks[i])
+      };
+      document.getElementById("rank").textContent = yourrank.rank
+    })
+  </script>
+</body>
+</html>
