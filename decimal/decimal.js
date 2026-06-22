@@ -40,24 +40,6 @@ class Decimal {
     digits = digits.replace(/^0+/, "");
     this.man = Number(digits || 0);
     this.exp = expSign * Number(m[7] || 0) - fPart.length;
-    function countE(str) {
-    	str = typeof str !== "string" ? (str??"").toString() : str.trim();
-    	var count = 0;
-    	while (true) {
-    		if (str.startsWith("e")) {
-    			str = str.slice(1).trim()
-    			count++;
-    		} else { break; }
-    	};
-    	return count
-    }
-    this.layer = countE(s);
-    if (this.exp < 10 && countE(s) > 0) {
-      let c = { man: this.man, exp: this.exp }
-      this.man = 10**((c.man * 10 ** c.exp)%1);
-      this.exp = c.man * 10 ** c.exp;
-      this.layer--;
-    }
     this.sign = (this.man === 0) ? 0 : sign;
     this.fix();
     if ((m[7] ?? "0").toString().toLowerCase().includes("inf") ||
@@ -200,7 +182,6 @@ class Decimal {
       this.sign=0-this.sign
     }
     while (true) {
-      if (this.layer === 0) {
         if(this.man===NaN&&this.exp===Infinity)return Decimal.Inf
         if(this.man===NaN&&this.exp===NaN)return Decimal.NaN
         if(this.comp(0)===0)return
@@ -213,7 +194,6 @@ class Decimal {
         } else {
           break;
         }
-      }
     }
     return;
   }
